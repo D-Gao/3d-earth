@@ -10,7 +10,7 @@ const Home = () => {
       <Canvas
         frameloop="demand"
         shadows
-        camera={{ position: [0, 0, 5], fov: 42 }}
+        camera={{ position: [0, 0, 500], fov: 42 }}
       >
         <color attach="background" args={["#171720"]} />
         {/* <fog attach="fog" args={["#171720", 10, 32]} /> */}
