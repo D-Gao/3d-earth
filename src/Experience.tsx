@@ -8,6 +8,7 @@ import {
   LineLoop,
   Mesh,
   MeshPhongMaterial,
+  Vector3,
 } from "three";
 import { Position } from "geojson";
 import world from "@/assets/world.json";
@@ -15,6 +16,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { lon2xyz, minMax } from "./utils";
 import Delaunator from "delaunator";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { useFrame } from "@react-three/fiber";
 
 const config = {
   R: 120,
@@ -26,6 +28,8 @@ const currentStyle = {
   opacity: 1,
 };
 
+const rotationAxis = new Vector3(0, 1, 0);
+
 const Experience = () => {
   const earthGroupRef = useRef<Group>(null);
 
@@ -36,10 +40,9 @@ const Experience = () => {
   const geometryArr = useRef<BufferGeometry[]>([]);
 
   useEffect(() => {
-    console.log(features);
     const countryShapes = create();
     earthGroupRef.current!.add(...countryShapes);
-  }, []);
+  }, [features]);
 
   const create = () => {
     const arr: Group[] = [];
@@ -238,10 +241,20 @@ const Experience = () => {
     return new Mesh(aggGeometry, material);
   };
 
+  const stopRef = useRef(false);
+  const toggleMove = () => {
+    stopRef.current = !stopRef.current;
+  };
+
+  useFrame(() => {
+    if (!stopRef.current)
+      earthGroupRef.current!.rotateOnAxis(rotationAxis, 0.01);
+  });
+
   return (
     <>
       <CameraControls></CameraControls>
-      <group name="mapGroup" ref={earthGroupRef}>
+      <group name="mapGroup" ref={earthGroupRef} onDoubleClick={toggleMove}>
         <mesh name="earthMesh">
           <sphereGeometry args={[config.R - 1, 39, 39]}></sphereGeometry>
           <meshPhongMaterial color={0x13162c}></meshPhongMaterial>

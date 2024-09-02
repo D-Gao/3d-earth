@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <>
       <Canvas
-        frameloop="demand"
+        /* frameloop="demand" */
         shadows
         camera={{ position: [0, 0, 500], fov: 42 }}
       >
