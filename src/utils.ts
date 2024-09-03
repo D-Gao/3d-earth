@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Position } from "geojson";
 import { Quaternion, Vector3 } from "three";
+
+export const config = {
+  R: 120,
+};
 
 export interface Coordinates3D {
   x: number;
@@ -93,9 +98,9 @@ export const radianAOB = (A: Vector3, B: Vector3, O: Vector3) => {
   return Math.acos(cosAngle); //余弦值转夹角弧度值,通过余弦值可以计算夹角范围是0~180度
 };
 
-//求三个点的外接圆圆心，p1, p2, p3表示三个点的坐标Vector3。
+//Find the circumcenter (the center of the circumcircle) of three points
 export const threePointCenter = (p1: Vector3, p2: Vector3, p3: Vector3) => {
-  const L1 = p1.lengthSq(); //p1到坐标原点距离的平方
+  const L1 = p1.lengthSq();
   const L2 = p2.lengthSq();
   const L3 = p3.lengthSq();
   const x1 = p1.x,
@@ -107,6 +112,28 @@ export const threePointCenter = (p1: Vector3, p2: Vector3, p3: Vector3) => {
   const S = x1 * y2 + x2 * y3 + x3 * y1 - x1 * y3 - x2 * y1 - x3 * y2;
   const x = (L2 * y3 + L1 * y2 + L3 * y1 - L2 * y1 - L3 * y2 - L1 * y3) / S / 2;
   const y = (L3 * x2 + L2 * x1 + L1 * x3 - L1 * x2 - L2 * x3 - L3 * x1) / S / 2;
-  // 三点外接圆圆心坐标
   return new Vector3(x, y, 0);
+};
+
+/**
+ *
+ * @param point
+ * @param polygon
+ * @returns
+ * check if the point is inside the polygon or not
+ */
+export const pointInPolygon = (point: number[], polygon: Position[]) => {
+  const x = point[0],
+    y = point[1];
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const xi = polygon[i][0],
+      yi = polygon[i][1];
+    const xj = polygon[j][0],
+      yj = polygon[j][1];
+    const intersect =
+      yi > y != yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
 };
