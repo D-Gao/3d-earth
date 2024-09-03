@@ -25,7 +25,7 @@ Below are screenshots of 2 results one with just Delaunator on the left, and oth
 
 <table>
   <tr>
-    <td  align="center"><img src="./src/assets/one.png" alt="only delaunator"  /><sub><b>only Delaunator</b></sub></td>
-    <td  align="center"> <img src="./src/assets/two.png" alt="both processes" /><sub><b>both processes</b></sub></td>
+    <td  align="center"><img src="./src/assets/two.png" alt="only delaunator"  /><sub><b>only Delaunator</b></sub></td>
+    <td  align="center"> <img src="./src/assets/one.png" alt="both processes" /><sub><b>both processes</b></sub></td>
   </tr>
 </table>

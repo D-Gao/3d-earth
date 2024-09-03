@@ -269,7 +269,7 @@ const Experience = () => {
         usefulIndexArr.push(indexArr[i], indexArr[i + 1], indexArr[i + 2]); //这种情况需要设置three.js材质背面可见THREE.BackSide才能看到球面国家Mesh
       }
     }
-    return indexArr;
+    return usefulIndexArr;
   };
 
   const mergeGeometry = () => {
