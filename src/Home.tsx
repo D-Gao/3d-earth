@@ -18,6 +18,11 @@ const Home = () => {
           <Experience></Experience>
         </Suspense>
       </Canvas>
+      <div className="absolute top-0 p-2">
+        <p className="text-cyan-50">
+          double click on sphere to toggle the rotation
+        </p>
+      </div>
 
       <Loader />
     </>

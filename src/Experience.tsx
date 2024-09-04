@@ -21,7 +21,7 @@ const Experience = () => {
   };
   useFrame((_, delta) => {
     if (!stopRef.current)
-      earthGroupRef.current!.rotateOnAxis(rotationAxis, 0.01 * delta);
+      earthGroupRef.current!.rotateOnAxis(rotationAxis, 0.1 * delta);
   });
 
   return (

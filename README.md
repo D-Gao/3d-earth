@@ -2,10 +2,34 @@
 
 This project is inspired by the github project of [GlobeStream3D](https://github.com/hululuuuuu/GlobeStream3D), in particular the flyline feature. So the aims is to create a 3d earth with React Three Fiber to reproduce this interesting feature, also with possible optimizations.
 
-## motivation of the project
+## Demo
+
+The final demo is available here [3d-earth-eta.vercel.app](https://3d-earth-eta.vercel.app)
+
+## Motivation
 
 - Interesting, learning is one of the main motivation
 - Find it may be hard to integrate with React and maybe a bit difficult to use that library with my own customization, so it is better to dig into the source and try to understand it and custmize it as I prefer. Alway wanted my projects as much dependencies free as possible.
+
+## How to Use
+
+install the dependencies
+
+```bash
+npm install
+```
+
+run in local development
+
+```bash
+npm run dev
+```
+
+build to production
+
+```bash
+npm run build
+```
 
 ## Understanding the GeoJson Structure
 
