@@ -1,4 +1,4 @@
-export const initData = [
+export const flyLineData = [
   {
     from: {
       id: "1",

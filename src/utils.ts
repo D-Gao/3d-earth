@@ -50,20 +50,41 @@ export const minMax = (arr: number[]) => {
   return [Math.floor(arr[0]), Math.ceil(arr[arr.length - 1])];
 };
 
+/**
+ *
+ * @param start
+ * starting position
+ *
+ * @param end
+ * ending position
+ *
+ */
+
 export const _3Dto2D = (start: Vector3, end: Vector3) => {
-  //球心坐标
-  const origin = new Vector3(0, 0, 0); //球心坐标
-  const startDir = start.clone().sub(origin); //飞线起点与球心构成方向向量
-  const endDir = end.clone().sub(origin); //飞线结束点与球心构成方向向量
-  // startDir和endDir构成一个三角形，.cross()叉乘计算该三角形法线normal
+  //coordinates of the earth center
+  const origin = new Vector3(0, 0, 0);
+  const startDir = start.clone().sub(origin);
+  const endDir = end.clone().sub(origin);
+  //startDir and endDir form a triangle. The .cross() function is used to calculate the normal of this triangle.
   const normal = new Vector3().crossVectors(startDir, endDir).normalize();
+
+  /**
+   * This method creates a quaternion that represents
+   * the rotation needed to align the normal vector (calculated earlier)
+   * with the Z-axis (which is represented by the vector (0, 0, 1)).
+   */
   const xoy_quaternion = new Quaternion().setFromUnitVectors(
     normal,
     new Vector3(0, 0, 1)
   );
+
   const start_xoy = start.clone().applyQuaternion(xoy_quaternion);
   const end_xoy = end.clone().applyQuaternion(xoy_quaternion);
 
+  /**
+   *  If start_xoy has components (x1, y1, z1) and end_xoy has components (x2, y2, z2),
+   * then the result will be a Vector3 with components (x1 + x2, y1 + y2, z1 + z2).
+   */
   const middle_xoy = new Vector3()
     .addVectors(start_xoy, end_xoy)
     .multiplyScalar(0.5)
@@ -77,25 +98,46 @@ export const _3Dto2D = (start: Vector3, end: Vector3) => {
     .applyQuaternion(xoy_quaternion_middle);
   const end_xoy_middle = end_xoy.clone().applyQuaternion(xoy_quaternion_middle);
 
+  /**
+   * the invert() will return the inverse of the quaternion
+   * for a given q and q^-1  q * q^-1 = (1,0,0,0)
+   *
+   * The multiply() method in quaternion operations combines two rotations. Specifically,
+   * if you have two quaternions q1 and q2, multiplying them gives a quaternion that
+   * represents applying q2's rotation first and then q1's rotation.
+   * However, because you are using inverted quaternions,
+   * the rotations is reversed.
+   */
   const quaternionInverse = xoy_quaternion
     .clone()
     .invert()
     .multiply(xoy_quaternion_middle.clone().invert());
   return {
-    // 返回两次旋转四元数的逆四元数
     quaternion: quaternionInverse,
-    // 范围两次旋转后在XOY平面上关于y轴对称的圆弧起点和结束点坐标
     startPoint3D: start_xoy_middle,
     endPoint3D: end_xoy_middle,
   };
 };
+
+/**
+ *
+ * @param A
+ * @param B
+ * @param O
+ * @returns
+ * return the angle(0~180 degree) formed by AO and BO
+ */
 export const radianAOB = (A: Vector3, B: Vector3, O: Vector3) => {
   // dir1、dir2：球面上两个点和球心构成的方向向量
   const dir1 = A.clone().sub(O).normalize();
   const dir2 = B.clone().sub(O).normalize();
-  //点乘.dot()计算夹角余弦值
+  /**
+   * .dot()calculate the cosine value
+   * dot product => |dir1| * |dir2| * cosAngle = 1 * 1 * cosAngle
+   * where |dir| is the module of the vec3 dir which is normalize to 1
+   **/
   const cosAngle = dir1.clone().dot(dir2);
-  return Math.acos(cosAngle); //余弦值转夹角弧度值,通过余弦值可以计算夹角范围是0~180度
+  return Math.acos(cosAngle);
 };
 
 //Find the circumcenter (the center of the circumcircle) of three points
